@@ -127,9 +127,9 @@ public final class AppCoordinator {
         NSApp.activate(ignoringOtherApps: true)
         NSApp.orderFrontStandardAboutPanel(options: [
             .applicationName: "MacCapture",
-            .applicationVersion: "0.1.0",
+            .applicationVersion: "0.3.0",
             .credits: NSAttributedString(
-                string: "Lightweight native macOS screen capture and vector annotation toolbar."
+                string: "Lightweight native macOS screen capture, scrolling capture, screen recording, and vector annotation toolbar."
             ),
         ])
     }

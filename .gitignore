@@ -5,7 +5,9 @@
 Icon
 
 # Xcode
-build/
+build/*
+!build/MacCapture.app
+!build/MacCapture.app/**
 DerivedData/
 *.xcuserstate
 project.xcworkspace/xcuserdata/

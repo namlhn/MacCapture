@@ -1,4 +1,4 @@
-# MacCapture — Ứng dụng Chụp Màn Hình & Chú Thích Chuyên Nghiệp cho macOS
+# MacCapture — Ứng dụng Chụp, Quay Màn Hình & Chú Thích Chuyên Nghiệp cho macOS (`v0.3.0`)
 
 [English](README.md) • **Tiếng Việt**
 
@@ -97,7 +97,9 @@ MacCapture/
 │   └── test-matrix.md                # Ma trận kiểm thử tự động & thủ công
 ├── MacCapture.xcodeproj/             # Project Xcode thuần native (không phụ thuộc thư viện ngoài)
 ├── build/
-│   └── MacCapture.app                # Bản đóng gói ứng dụng Release (.app) sẵn sàng chạy ngay
+│   └── MacCapture.app                # Bản đóng gói ứng dụng Release (.app) sẵn sàng chạy ngay (v0.3.0)
+├── releases/
+│   └── MacCapture-v0.3.0-macOS.zip   # Bản nén phân phối Release v0.3.0
 ├── MacCapture/
 │   ├── App/
 │   │   ├── MacCaptureApp.swift       # Entry point của ứng dụng

@@ -1,4 +1,4 @@
-# MacCapture — Professional Screen Capture & Annotation App for macOS
+# MacCapture — Professional Screen Capture, Recording & Annotation App for macOS (`v0.3.0`)
 
 **English** • [Tiếng Việt](README.vi.md)
 
@@ -99,7 +99,9 @@ MacCapture/
 │   └── test-matrix.md                # Automated test matrix & manual validation criteria
 ├── MacCapture.xcodeproj/             # Native Xcode project (zero third-party dependencies)
 ├── build/
-│   └── MacCapture.app                # Standalone pre-compiled Release application bundle
+│   └── MacCapture.app                # Standalone pre-compiled Release application bundle (v0.3.0)
+├── releases/
+│   └── MacCapture-v0.3.0-macOS.zip   # Distributable signed Release archive (v0.3.0)
 ├── MacCapture/
 │   ├── App/
 │   │   ├── MacCaptureApp.swift       # SwiftUI app entry point

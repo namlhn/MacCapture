@@ -1,0 +1,699 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000010000000000000001 /* MacCaptureApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000001 /* MacCaptureApp.swift */; };
+		A10000020000000000000001 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000020000000000000001 /* AppDelegate.swift */; };
+		A10000030000000000000001 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000030000000000000001 /* AppCoordinator.swift */; };
+		A10000040000000000000001 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000040000000000000001 /* MenuBarController.swift */; };
+		A10000050000000000000001 /* FloatingToolbarPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000050000000000000001 /* FloatingToolbarPanel.swift */; };
+		A10000060000000000000001 /* ToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000060000000000000001 /* ToolbarView.swift */; };
+		A10000070000000000000001 /* ToolbarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000070000000000000001 /* ToolbarViewModel.swift */; };
+		A10000080000000000000001 /* ToolbarPositionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000080000000000000001 /* ToolbarPositionStore.swift */; };
+		A10000090000000000000001 /* CaptureCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000090000000000000001 /* CaptureCoordinator.swift */; };
+		A100000A0000000000000001 /* ScreenCaptureEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000A0000000000000001 /* ScreenCaptureEngine.swift */; };
+		A100000B0000000000000001 /* RegionOverlayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000B0000000000000001 /* RegionOverlayController.swift */; };
+		A100000C0000000000000001 /* WindowSelectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000C0000000000000001 /* WindowSelectionController.swift */; };
+		A100000D0000000000000001 /* CoordinateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000D0000000000000001 /* CoordinateConverter.swift */; };
+		A100001E0000000000000001 /* ScrollingCaptureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200001E0000000000000001 /* ScrollingCaptureController.swift */; };
+		A100000E0000000000000001 /* EditorWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000E0000000000000001 /* EditorWindowController.swift */; };
+		A100000F0000000000000001 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000F0000000000000001 /* EditorView.swift */; };
+		A10000100000000000000001 /* AnnotationCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000100000000000000001 /* AnnotationCanvas.swift */; };
+		A10000110000000000000001 /* AnnotationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000110000000000000001 /* AnnotationModels.swift */; };
+		A10000120000000000000001 /* AnnotationCommandStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000120000000000000001 /* AnnotationCommandStack.swift */; };
+		A10000130000000000000001 /* ImageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000130000000000000001 /* ImageRenderer.swift */; };
+		A10000140000000000000001 /* PNGExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000140000000000000001 /* PNGExporter.swift */; };
+		A10000150000000000000001 /* ClipboardService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000150000000000000001 /* ClipboardService.swift */; };
+		A10000160000000000000001 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000160000000000000001 /* PreferencesView.swift */; };
+		A10000170000000000000001 /* PreferencesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000170000000000000001 /* PreferencesStore.swift */; };
+		A10000180000000000000001 /* HotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000180000000000000001 /* HotkeyManager.swift */; };
+		A10000190000000000000001 /* PermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000190000000000000001 /* PermissionManager.swift */; };
+		A100001A0000000000000001 /* CaptureTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200001A0000000000000001 /* CaptureTypes.swift */; };
+		A100001B0000000000000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A200001B0000000000000001 /* Assets.xcassets */; };
+		A10000210000000000000001 /* CoordinateConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000210000000000000001 /* CoordinateConverterTests.swift */; };
+		A10000220000000000000001 /* CaptureCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000220000000000000001 /* CaptureCoordinatorTests.swift */; };
+		A10000230000000000000001 /* AnnotationCommandTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000230000000000000001 /* AnnotationCommandTests.swift */; };
+		A10000240000000000000001 /* ExportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000240000000000000001 /* ExportTests.swift */; };
+		A10002020000000000000001 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000020000000000000001 /* AppDelegate.swift */; };
+		A10002030000000000000001 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000030000000000000001 /* AppCoordinator.swift */; };
+		A10002040000000000000001 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000040000000000000001 /* MenuBarController.swift */; };
+		A10002050000000000000001 /* FloatingToolbarPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000050000000000000001 /* FloatingToolbarPanel.swift */; };
+		A10002060000000000000001 /* ToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000060000000000000001 /* ToolbarView.swift */; };
+		A10002070000000000000001 /* ToolbarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000070000000000000001 /* ToolbarViewModel.swift */; };
+		A10002080000000000000001 /* ToolbarPositionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000080000000000000001 /* ToolbarPositionStore.swift */; };
+		A10002090000000000000001 /* CaptureCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000090000000000000001 /* CaptureCoordinator.swift */; };
+		A100020A0000000000000001 /* ScreenCaptureEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000A0000000000000001 /* ScreenCaptureEngine.swift */; };
+		A100020B0000000000000001 /* RegionOverlayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000B0000000000000001 /* RegionOverlayController.swift */; };
+		A100020C0000000000000001 /* WindowSelectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000C0000000000000001 /* WindowSelectionController.swift */; };
+		A100020D0000000000000001 /* CoordinateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000D0000000000000001 /* CoordinateConverter.swift */; };
+		A100021E0000000000000001 /* ScrollingCaptureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200001E0000000000000001 /* ScrollingCaptureController.swift */; };
+		A100020E0000000000000001 /* EditorWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000E0000000000000001 /* EditorWindowController.swift */; };
+		A100020F0000000000000001 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000F0000000000000001 /* EditorView.swift */; };
+		A10002100000000000000001 /* AnnotationCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000100000000000000001 /* AnnotationCanvas.swift */; };
+		A10002110000000000000001 /* AnnotationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000110000000000000001 /* AnnotationModels.swift */; };
+		A10002120000000000000001 /* AnnotationCommandStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000120000000000000001 /* AnnotationCommandStack.swift */; };
+		A10002130000000000000001 /* ImageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000130000000000000001 /* ImageRenderer.swift */; };
+		A10002140000000000000001 /* PNGExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000140000000000000001 /* PNGExporter.swift */; };
+		A10002150000000000000001 /* ClipboardService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000150000000000000001 /* ClipboardService.swift */; };
+		A10002160000000000000001 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000160000000000000001 /* PreferencesView.swift */; };
+		A10002170000000000000001 /* PreferencesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000170000000000000001 /* PreferencesStore.swift */; };
+		A10002180000000000000001 /* HotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000180000000000000001 /* HotkeyManager.swift */; };
+		A10002190000000000000001 /* PermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000190000000000000001 /* PermissionManager.swift */; };
+		A100021A0000000000000001 /* CaptureTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200001A0000000000000001 /* CaptureTypes.swift */; };
+		A10000310000000000000001 /* ToolbarUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000310000000000000001 /* ToolbarUITests.swift */; };
+		A10000320000000000000001 /* EditorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000320000000000000001 /* EditorUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A30000010000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A00000010000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A40000010000000000000001;
+			remoteInfo = MacCapture;
+		};
+		A30000020000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A00000010000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A40000010000000000000001;
+			remoteInfo = MacCapture;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A20000010000000000000001 /* MacCaptureApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacCaptureApp.swift; sourceTree = "<group>"; };
+		A20000020000000000000001 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A20000030000000000000001 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		A20000040000000000000001 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
+		A20000050000000000000001 /* FloatingToolbarPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingToolbarPanel.swift; sourceTree = "<group>"; };
+		A20000060000000000000001 /* ToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarView.swift; sourceTree = "<group>"; };
+		A20000070000000000000001 /* ToolbarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarViewModel.swift; sourceTree = "<group>"; };
+		A20000080000000000000001 /* ToolbarPositionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarPositionStore.swift; sourceTree = "<group>"; };
+		A20000090000000000000001 /* CaptureCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureCoordinator.swift; sourceTree = "<group>"; };
+		A200000A0000000000000001 /* ScreenCaptureEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenCaptureEngine.swift; sourceTree = "<group>"; };
+		A200000B0000000000000001 /* RegionOverlayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionOverlayController.swift; sourceTree = "<group>"; };
+		A200000C0000000000000001 /* WindowSelectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSelectionController.swift; sourceTree = "<group>"; };
+		A200000D0000000000000001 /* CoordinateConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateConverter.swift; sourceTree = "<group>"; };
+		A200001E0000000000000001 /* ScrollingCaptureController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollingCaptureController.swift; sourceTree = "<group>"; };
+		A200000E0000000000000001 /* EditorWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorWindowController.swift; sourceTree = "<group>"; };
+		A200000F0000000000000001 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
+		A20000100000000000000001 /* AnnotationCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationCanvas.swift; sourceTree = "<group>"; };
+		A20000110000000000000001 /* AnnotationModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationModels.swift; sourceTree = "<group>"; };
+		A20000120000000000000001 /* AnnotationCommandStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationCommandStack.swift; sourceTree = "<group>"; };
+		A20000130000000000000001 /* ImageRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRenderer.swift; sourceTree = "<group>"; };
+		A20000140000000000000001 /* PNGExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PNGExporter.swift; sourceTree = "<group>"; };
+		A20000150000000000000001 /* ClipboardService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardService.swift; sourceTree = "<group>"; };
+		A20000160000000000000001 /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
+		A20000170000000000000001 /* PreferencesStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesStore.swift; sourceTree = "<group>"; };
+		A20000180000000000000001 /* HotkeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyManager.swift; sourceTree = "<group>"; };
+		A20000190000000000000001 /* PermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManager.swift; sourceTree = "<group>"; };
+		A200001A0000000000000001 /* CaptureTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureTypes.swift; sourceTree = "<group>"; };
+		A200001B0000000000000001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A200001C0000000000000001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A200001D0000000000000001 /* MacCapture.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MacCapture.entitlements; sourceTree = "<group>"; };
+		A20000210000000000000001 /* CoordinateConverterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateConverterTests.swift; sourceTree = "<group>"; };
+		A20000220000000000000001 /* CaptureCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureCoordinatorTests.swift; sourceTree = "<group>"; };
+		A20000230000000000000001 /* AnnotationCommandTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationCommandTests.swift; sourceTree = "<group>"; };
+		A20000240000000000000001 /* ExportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportTests.swift; sourceTree = "<group>"; };
+		A20000310000000000000001 /* ToolbarUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarUITests.swift; sourceTree = "<group>"; };
+		A20000320000000000000001 /* EditorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorUITests.swift; sourceTree = "<group>"; };
+		A20000910000000000000001 /* MacCapture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacCapture.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A20000920000000000000001 /* MacCaptureTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacCaptureTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A20000930000000000000001 /* MacCaptureUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacCaptureUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A50000010000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A50000020000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A50000030000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A60000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				A60000010000000000000001 /* MacCapture */,
+				A60000200000000000000001 /* MacCaptureTests */,
+				A60000300000000000000001 /* MacCaptureUITests */,
+				A60000900000000000000001 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A60000010000000000000001 /* MacCapture */ = {
+			isa = PBXGroup;
+			children = (
+				A60000020000000000000001 /* App */,
+				A60000030000000000000001 /* Features */,
+				A60000090000000000000001 /* Core */,
+				A600000A0000000000000001 /* Resources */,
+			);
+			path = MacCapture;
+			sourceTree = "<group>";
+		};
+		A60000020000000000000001 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000001 /* MacCaptureApp.swift */,
+				A20000020000000000000001 /* AppDelegate.swift */,
+				A20000030000000000000001 /* AppCoordinator.swift */,
+				A20000040000000000000001 /* MenuBarController.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A60000030000000000000001 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				A60000040000000000000001 /* Toolbar */,
+				A60000050000000000000001 /* Capture */,
+				A60000060000000000000001 /* Editor */,
+				A60000070000000000000001 /* Export */,
+				A60000080000000000000001 /* Settings */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		A60000040000000000000001 /* Toolbar */ = {
+			isa = PBXGroup;
+			children = (
+				A20000050000000000000001 /* FloatingToolbarPanel.swift */,
+				A20000060000000000000001 /* ToolbarView.swift */,
+				A20000070000000000000001 /* ToolbarViewModel.swift */,
+				A20000080000000000000001 /* ToolbarPositionStore.swift */,
+			);
+			path = Toolbar;
+			sourceTree = "<group>";
+		};
+		A60000050000000000000001 /* Capture */ = {
+			isa = PBXGroup;
+			children = (
+				A20000090000000000000001 /* CaptureCoordinator.swift */,
+				A200000A0000000000000001 /* ScreenCaptureEngine.swift */,
+				A200000B0000000000000001 /* RegionOverlayController.swift */,
+				A200000C0000000000000001 /* WindowSelectionController.swift */,
+				A200000D0000000000000001 /* CoordinateConverter.swift */,
+				A200001E0000000000000001 /* ScrollingCaptureController.swift */,
+			);
+			path = Capture;
+			sourceTree = "<group>";
+		};
+		A60000060000000000000001 /* Editor */ = {
+			isa = PBXGroup;
+			children = (
+				A200000E0000000000000001 /* EditorWindowController.swift */,
+				A200000F0000000000000001 /* EditorView.swift */,
+				A20000100000000000000001 /* AnnotationCanvas.swift */,
+				A20000110000000000000001 /* AnnotationModels.swift */,
+				A20000120000000000000001 /* AnnotationCommandStack.swift */,
+			);
+			path = Editor;
+			sourceTree = "<group>";
+		};
+		A60000070000000000000001 /* Export */ = {
+			isa = PBXGroup;
+			children = (
+				A20000130000000000000001 /* ImageRenderer.swift */,
+				A20000140000000000000001 /* PNGExporter.swift */,
+				A20000150000000000000001 /* ClipboardService.swift */,
+			);
+			path = Export;
+			sourceTree = "<group>";
+		};
+		A60000080000000000000001 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				A20000160000000000000001 /* PreferencesView.swift */,
+				A20000170000000000000001 /* PreferencesStore.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		A60000090000000000000001 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				A20000180000000000000001 /* HotkeyManager.swift */,
+				A20000190000000000000001 /* PermissionManager.swift */,
+				A200001A0000000000000001 /* CaptureTypes.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		A600000A0000000000000001 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A200001B0000000000000001 /* Assets.xcassets */,
+				A200001C0000000000000001 /* Info.plist */,
+				A200001D0000000000000001 /* MacCapture.entitlements */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A60000200000000000000001 /* MacCaptureTests */ = {
+			isa = PBXGroup;
+			children = (
+				A20000210000000000000001 /* CoordinateConverterTests.swift */,
+				A20000220000000000000001 /* CaptureCoordinatorTests.swift */,
+				A20000230000000000000001 /* AnnotationCommandTests.swift */,
+				A20000240000000000000001 /* ExportTests.swift */,
+			);
+			path = MacCaptureTests;
+			sourceTree = "<group>";
+		};
+		A60000300000000000000001 /* MacCaptureUITests */ = {
+			isa = PBXGroup;
+			children = (
+				A20000310000000000000001 /* ToolbarUITests.swift */,
+				A20000320000000000000001 /* EditorUITests.swift */,
+			);
+			path = MacCaptureUITests;
+			sourceTree = "<group>";
+		};
+		A60000900000000000000001 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A20000910000000000000001 /* MacCapture.app */,
+				A20000920000000000000001 /* MacCaptureTests.xctest */,
+				A20000930000000000000001 /* MacCaptureUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A40000010000000000000001 /* MacCapture */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A80000020000000000000001 /* Build configuration list for PBXNativeTarget "MacCapture" */;
+			buildPhases = (
+				A70000010000000000000001 /* Sources */,
+				A50000010000000000000001 /* Frameworks */,
+				A70000100000000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MacCapture;
+			productName = MacCapture;
+			productReference = A20000910000000000000001 /* MacCapture.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A40000020000000000000001 /* MacCaptureTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A80000030000000000000001 /* Build configuration list for PBXNativeTarget "MacCaptureTests" */;
+			buildPhases = (
+				A70000020000000000000001 /* Sources */,
+				A50000020000000000000001 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A90000010000000000000001 /* PBXTargetDependency */,
+			);
+			name = MacCaptureTests;
+			productName = MacCaptureTests;
+			productReference = A20000920000000000000001 /* MacCaptureTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		A40000030000000000000001 /* MacCaptureUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A80000040000000000000001 /* Build configuration list for PBXNativeTarget "MacCaptureUITests" */;
+			buildPhases = (
+				A70000030000000000000001 /* Sources */,
+				A50000030000000000000001 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A90000020000000000000001 /* PBXTargetDependency */,
+			);
+			name = MacCaptureUITests;
+			productName = MacCaptureUITests;
+			productReference = A20000930000000000000001 /* MacCaptureUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A00000010000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					A40000010000000000000001 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					A40000020000000000000001 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = A40000010000000000000001;
+					};
+					A40000030000000000000001 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = A40000010000000000000001;
+					};
+				};
+			};
+			buildConfigurationList = A80000010000000000000001 /* Build configuration list for PBXProject "MacCapture" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A60000000000000000000001;
+			productRefGroup = A60000900000000000000001 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A40000010000000000000001 /* MacCapture */,
+				A40000020000000000000001 /* MacCaptureTests */,
+				A40000030000000000000001 /* MacCaptureUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A70000100000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A100001B0000000000000001 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A70000010000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000010000000000000001 /* MacCaptureApp.swift in Sources */,
+				A10000020000000000000001 /* AppDelegate.swift in Sources */,
+				A10000030000000000000001 /* AppCoordinator.swift in Sources */,
+				A10000040000000000000001 /* MenuBarController.swift in Sources */,
+				A10000050000000000000001 /* FloatingToolbarPanel.swift in Sources */,
+				A10000060000000000000001 /* ToolbarView.swift in Sources */,
+				A10000070000000000000001 /* ToolbarViewModel.swift in Sources */,
+				A10000080000000000000001 /* ToolbarPositionStore.swift in Sources */,
+				A10000090000000000000001 /* CaptureCoordinator.swift in Sources */,
+				A100000A0000000000000001 /* ScreenCaptureEngine.swift in Sources */,
+				A100000B0000000000000001 /* RegionOverlayController.swift in Sources */,
+				A100000C0000000000000001 /* WindowSelectionController.swift in Sources */,
+				A100000D0000000000000001 /* CoordinateConverter.swift in Sources */,
+				A100001E0000000000000001 /* ScrollingCaptureController.swift in Sources */,
+				A100000E0000000000000001 /* EditorWindowController.swift in Sources */,
+				A100000F0000000000000001 /* EditorView.swift in Sources */,
+				A10000100000000000000001 /* AnnotationCanvas.swift in Sources */,
+				A10000110000000000000001 /* AnnotationModels.swift in Sources */,
+				A10000120000000000000001 /* AnnotationCommandStack.swift in Sources */,
+				A10000130000000000000001 /* ImageRenderer.swift in Sources */,
+				A10000140000000000000001 /* PNGExporter.swift in Sources */,
+				A10000150000000000000001 /* ClipboardService.swift in Sources */,
+				A10000160000000000000001 /* PreferencesView.swift in Sources */,
+				A10000170000000000000001 /* PreferencesStore.swift in Sources */,
+				A10000180000000000000001 /* HotkeyManager.swift in Sources */,
+				A10000190000000000000001 /* PermissionManager.swift in Sources */,
+				A100001A0000000000000001 /* CaptureTypes.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A70000020000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10002020000000000000001 /* AppDelegate.swift in Sources */,
+				A10002030000000000000001 /* AppCoordinator.swift in Sources */,
+				A10002040000000000000001 /* MenuBarController.swift in Sources */,
+				A10002050000000000000001 /* FloatingToolbarPanel.swift in Sources */,
+				A10002060000000000000001 /* ToolbarView.swift in Sources */,
+				A10002070000000000000001 /* ToolbarViewModel.swift in Sources */,
+				A10002080000000000000001 /* ToolbarPositionStore.swift in Sources */,
+				A10002090000000000000001 /* CaptureCoordinator.swift in Sources */,
+				A100020A0000000000000001 /* ScreenCaptureEngine.swift in Sources */,
+				A100020B0000000000000001 /* RegionOverlayController.swift in Sources */,
+				A100020C0000000000000001 /* WindowSelectionController.swift in Sources */,
+				A100020D0000000000000001 /* CoordinateConverter.swift in Sources */,
+				A100021E0000000000000001 /* ScrollingCaptureController.swift in Sources */,
+				A100020E0000000000000001 /* EditorWindowController.swift in Sources */,
+				A100020F0000000000000001 /* EditorView.swift in Sources */,
+				A10002100000000000000001 /* AnnotationCanvas.swift in Sources */,
+				A10002110000000000000001 /* AnnotationModels.swift in Sources */,
+				A10002120000000000000001 /* AnnotationCommandStack.swift in Sources */,
+				A10002130000000000000001 /* ImageRenderer.swift in Sources */,
+				A10002140000000000000001 /* PNGExporter.swift in Sources */,
+				A10002150000000000000001 /* ClipboardService.swift in Sources */,
+				A10002160000000000000001 /* PreferencesView.swift in Sources */,
+				A10002170000000000000001 /* PreferencesStore.swift in Sources */,
+				A10002180000000000000001 /* HotkeyManager.swift in Sources */,
+				A10002190000000000000001 /* PermissionManager.swift in Sources */,
+				A100021A0000000000000001 /* CaptureTypes.swift in Sources */,
+				A10000210000000000000001 /* CoordinateConverterTests.swift in Sources */,
+				A10000220000000000000001 /* CaptureCoordinatorTests.swift in Sources */,
+				A10000230000000000000001 /* AnnotationCommandTests.swift in Sources */,
+				A10000240000000000000001 /* ExportTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A70000030000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000310000000000000001 /* ToolbarUITests.swift in Sources */,
+				A10000320000000000000001 /* EditorUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A90000010000000000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A40000010000000000000001 /* MacCapture */;
+			targetProxy = A30000010000000000000001 /* PBXContainerItemProxy */;
+		};
+		A90000020000000000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A40000010000000000000001 /* MacCapture */;
+			targetProxy = A30000020000000000000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		AA0000010000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		AA0000020000000000000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		AA0000110000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MacCapture/Resources/MacCapture.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = MacCapture/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.maccapture.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		AA0000120000000000000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MacCapture/Resources/MacCapture.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = MacCapture/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.maccapture.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		AA0000210000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.maccapture.appTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		AA0000220000000000000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.maccapture.appTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		AA0000310000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.maccapture.appUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = MacCapture;
+			};
+			name = Debug;
+		};
+		AA0000320000000000000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.maccapture.appUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = MacCapture;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A80000010000000000000001 /* Build configuration list for PBXProject "MacCapture" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA0000010000000000000001 /* Debug */,
+				AA0000020000000000000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A80000020000000000000001 /* Build configuration list for PBXNativeTarget "MacCapture" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA0000110000000000000001 /* Debug */,
+				AA0000120000000000000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A80000030000000000000001 /* Build configuration list for PBXNativeTarget "MacCaptureTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA0000210000000000000001 /* Debug */,
+				AA0000220000000000000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A80000040000000000000001 /* Build configuration list for PBXNativeTarget "MacCaptureUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA0000310000000000000001 /* Debug */,
+				AA0000320000000000000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A00000010000000000000001 /* Project object */;
+}

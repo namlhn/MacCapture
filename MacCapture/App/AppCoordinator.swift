@@ -148,10 +148,15 @@ public final class AppCoordinator {
 
         toolbarViewModel.onRecordingRequested = { [weak self] mode, displayID in
             guard let self else { return }
+            let audioOptions = RecordingAudioOptions(
+                recordSystemAudio: self.preferences.recordSystemAudio,
+                recordMicrophone: self.preferences.recordMicrophone
+            )
             Task { @MainActor in
                 await self.recordingController.toggle(
                     mode: mode,
                     delay: self.preferences.captureDelay,
+                    audioOptions: audioOptions,
                     preferredDisplayID: displayID
                 )
             }
@@ -161,10 +166,36 @@ public final class AppCoordinator {
             self?.recordingController.isActive ?? false
         }
 
+        menuBarController.isSystemAudioEnabledProvider = { [weak self] in
+            self?.preferences.recordSystemAudio ?? true
+        }
+
+        menuBarController.isMicrophoneEnabledProvider = { [weak self] in
+            self?.preferences.recordMicrophone ?? true
+        }
+
+        menuBarController.onToggleSystemAudio = { [weak self] in
+            guard let self else { return }
+            self.preferences.recordSystemAudio.toggle()
+        }
+
+        menuBarController.onToggleMicrophone = { [weak self] in
+            guard let self else { return }
+            self.preferences.recordMicrophone.toggle()
+        }
+
         menuBarController.onRecordingModeSelected = { [weak self] mode in
             guard let self else { return }
+            let audioOptions = RecordingAudioOptions(
+                recordSystemAudio: self.preferences.recordSystemAudio,
+                recordMicrophone: self.preferences.recordMicrophone
+            )
             Task { @MainActor in
-                await self.recordingController.toggle(mode: mode, delay: self.preferences.captureDelay)
+                await self.recordingController.toggle(
+                    mode: mode,
+                    delay: self.preferences.captureDelay,
+                    audioOptions: audioOptions
+                )
             }
         }
 

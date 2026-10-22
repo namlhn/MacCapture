@@ -60,6 +60,8 @@ public final class PreferencesStore: ObservableObject {
         static let theme = "maccapture.theme"
         static let toolbarScale = "maccapture.toolbarScale"
         static let captureDelay = "maccapture.captureDelay"
+        static let recordSystemAudio = "maccapture.recordSystemAudio"
+        static let recordMicrophone = "maccapture.recordMicrophone"
         static let hotkeys = "maccapture.hotkeys"
     }
 
@@ -98,6 +100,14 @@ public final class PreferencesStore: ObservableObject {
         didSet { defaults.set(captureDelay.rawValue, forKey: Keys.captureDelay) }
     }
 
+    @Published public var recordSystemAudio: Bool {
+        didSet { defaults.set(recordSystemAudio, forKey: Keys.recordSystemAudio) }
+    }
+
+    @Published public var recordMicrophone: Bool {
+        didSet { defaults.set(recordMicrophone, forKey: Keys.recordMicrophone) }
+    }
+
     @Published public var hotkeys: [HotkeyAction: HotkeyShortcut] {
         didSet { saveHotkeys() }
     }
@@ -114,12 +124,20 @@ public final class PreferencesStore: ObservableObject {
         if defaults.object(forKey: Keys.showOnAllSpaces) == nil {
             defaults.set(true, forKey: Keys.showOnAllSpaces)
         }
+        if defaults.object(forKey: Keys.recordSystemAudio) == nil {
+            defaults.set(true, forKey: Keys.recordSystemAudio)
+        }
+        if defaults.object(forKey: Keys.recordMicrophone) == nil {
+            defaults.set(true, forKey: Keys.recordMicrophone)
+        }
 
         self.showToolbarOnStartup = defaults.bool(forKey: Keys.showToolbarOnStartup)
         self.alwaysOnTop = defaults.bool(forKey: Keys.alwaysOnTop)
         self.showOnAllSpaces = defaults.bool(forKey: Keys.showOnAllSpaces)
         self.autoHideToEdge = defaults.bool(forKey: Keys.autoHideToEdge)
         self.launchAtLogin = defaults.bool(forKey: Keys.launchAtLogin)
+        self.recordSystemAudio = defaults.bool(forKey: Keys.recordSystemAudio)
+        self.recordMicrophone = defaults.bool(forKey: Keys.recordMicrophone)
 
         if let rawTheme = defaults.string(forKey: Keys.theme),
            let parsedTheme = AppTheme(rawValue: rawTheme) {

@@ -312,6 +312,9 @@ public struct ToolbarView: View {
                     Button(RecordingMode.fullscreen.displayName) {
                         viewModel.triggerRecording(.fullscreen)
                     }
+                    Divider()
+                    Toggle("Record System Audio", isOn: $preferences.recordSystemAudio)
+                    Toggle("Record Microphone Voice", isOn: $preferences.recordMicrophone)
                 } label: {
                     Image(systemName: "record.circle")
                         .font(.system(size: 13.5, weight: .medium))
@@ -320,7 +323,7 @@ public struct ToolbarView: View {
                 }
                 .menuStyle(.borderlessButton)
                 .fixedSize()
-                .help("Screen Recording (Region / Fullscreen)")
+                .help("Screen Recording (Region / Fullscreen / Audio)")
                 .accessibilityLabel("Screen Recording")
             }
         }

@@ -33,8 +33,11 @@ Designed with a strict **100% Local & Offline** privacy-first philosophy, MacCap
 - **Two Recording Modes**:
   - **Record Region**: Drag to select any custom area on screen. While recording, an on-screen **red dashed border frame with L-brackets and a `● REC W×H` badge** clearly marks the active recording boundary without blocking mouse clicks or keyboard input (`ignoresMouseEvents = true`).
   - **Record Fullscreen**: Record the entire active display at native Retina resolution.
-- **Floating Recording HUD**: Displays a live elapsed timer (`MM:SS`), resolution/mode label, and a one-click **Stop** button positioned right beside the recorded region (or at the top of the screen for fullscreen). Both the HUD and the region border are automatically excluded from the output video via `SCContentFilter`.
-- **Clean `.mp4` Output**: Encodes 30 FPS H.264 `.mp4` videos into `~/Movies/MacCapture/Screen Recording YYYY-MM-DD at HH.mm.ss.mp4` and automatically reveals the file in Finder when stopped.
+- **System Audio & Microphone Voice**:
+  - Records both **System Audio** (computer sound via `SCStreamOutputType.audio` at 48 kHz Stereo) and **Microphone Voice** (`AVCaptureAudioDataOutput`) mixed into a universal AAC stereo audio track so your voice and desktop audio play back in every video player and browser.
+  - Both audio sources can be toggled independently from the Floating Toolbar record menu, Menu Bar, or Preferences.
+- **Floating Recording HUD**: Displays a live elapsed timer (`MM:SS`), resolution/mode label, active audio/mic indicators, and a one-click **Stop** button positioned right beside the recorded region (or at the top of the screen for fullscreen). Both the HUD and the region border are automatically excluded from the output video via `SCContentFilter`.
+- **Clean `.mp4` Output**: Encodes 30 FPS H.264 + AAC `.mp4` videos into `~/Movies/MacCapture/Screen Recording YYYY-MM-DD at HH.mm.ss.mp4` and automatically reveals the file in Finder when stopped.
 
 ### 4. Non-Destructive Vector Annotation Editor
 Captured screenshots open immediately in a full-featured, zero-latency **Annotation Editor** window with active tool highlighting and a 50-step memory-efficient **Undo / Redo (`⌘Z` / `⇧⌘Z`)** command stack:

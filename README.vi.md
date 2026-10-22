@@ -33,8 +33,11 @@
 - **2 chế độ quay video**:
   - **Record Region (Quay vùng chọn)**: Kéo chọn vùng bất kỳ trên màn hình. Trong suốt quá trình quay, màn hình hiển thị **khung viền nét đứt màu đỏ + 4 góc chữ L kèm nhãn `● REC Rộng×Cao`** bao quanh vùng đang quay để dễ dàng nhận biết ranh giới ghi hình mà vẫn click chuột, cuộn trang và gõ phím xuyên qua bình thường (`ignoresMouseEvents = true`).
   - **Record Fullscreen (Quay toàn màn hình)**: Quay toàn bộ màn hình với độ phân giải Retina sắc nét.
-- **Thanh điều khiển nổi (Recording HUD)**: Hiển thị đồng hồ đếm thời gian thực (`MM:SS`), kích thước vùng quay và nút **Stop** nằm ngay cạnh khung vùng quay (hoặc phía trên màn hình) mà không cần phải bấm vào icon trên Menu Bar. Cả khung viền và thanh HUD đều được tự động loại trừ khỏi video xuất ra.
-- **Xuất file `.mp4` chuẩn H.264 (30 FPS)**: Tự động lưu tại `~/Movies/MacCapture/Screen Recording YYYY-MM-DD at HH.mm.ss.mp4` và mở Finder trỏ tới file ngay khi bấm dừng.
+- **Ghi âm thanh hệ thống (System Audio) & Giọng nói Micro (Voice)**:
+  - Hỗ trợ thu đồng thời cả **âm thanh máy tính** (`SCStreamOutputType.audio` 48 kHz Stereo) lẫn **giọng nói từ Microphone** (`AVCaptureAudioDataOutput`) và tự động trộn (mix) vào chung một luồng âm thanh AAC Stereo chuẩn, giúp phát đầy đủ cả tiếng máy và giọng nói trên mọi trình phát (QuickTime, trình duyệt, VLC, Slack, Telegram...).
+  - Có thể bật/tắt riêng từng nguồn âm thanh (**Record System Audio** / **Record Microphone Voice**) ngay trong menu quay trên thanh công cụ nổi, Menu Bar hoặc trong Preferences.
+- **Thanh điều khiển nổi (Recording HUD)**: Hiển thị đồng hồ đếm thời gian thực (`MM:SS`), kích thước vùng quay, biểu tượng trạng thái Loa/Micro và nút **Stop** nằm ngay cạnh khung vùng quay (hoặc phía trên màn hình) mà không cần phải bấm vào icon trên Menu Bar. Cả khung viền và thanh HUD đều được tự động loại trừ khỏi video xuất ra.
+- **Xuất file `.mp4` chuẩn H.264 + AAC (30 FPS)**: Tự động lưu tại `~/Movies/MacCapture/Screen Recording YYYY-MM-DD at HH.mm.ss.mp4` và mở Finder trỏ tới file ngay khi bấm dừng.
 
 ### 4. Trình chỉnh sửa & Chú thích ảnh (Non-Destructive Vector Annotation Editor)
 Ngay sau khi chụp, ảnh được mở trong cửa sổ **Annotation Editor** với giao diện chuyên nghiệp, làm nổi bật màu công cụ đang chọn và hỗ trợ đầy đủ **Undo / Redo (`⌘Z` / `⇧⌘Z`)** lên tới 50 bước mà không làm tốn bộ nhớ:

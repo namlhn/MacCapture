@@ -65,6 +65,11 @@ public struct PreferencesView: View {
                 }
             }
 
+            Section("Screen Recording Audio") {
+                Toggle("Record system audio (computer sound)", isOn: $preferences.recordSystemAudio)
+                Toggle("Record microphone voice", isOn: $preferences.recordMicrophone)
+            }
+
             Section("Startup") {
                 Toggle("Launch MacCapture at login", isOn: $preferences.launchAtLogin)
             }

@@ -1,4 +1,5 @@
 import AVFoundation
+import CoreAudio
 import CoreGraphics
 import CoreMedia
 import Foundation
@@ -20,6 +21,16 @@ public enum RecordingMode: String, Codable, CaseIterable, Sendable {
         case .region: return "record.circle"
         case .fullscreen: return "rectangle.inset.filled.badge.record"
         }
+    }
+}
+
+public struct RecordingAudioOptions: Equatable, Sendable {
+    public var recordSystemAudio: Bool
+    public var recordMicrophone: Bool
+
+    public init(recordSystemAudio: Bool = true, recordMicrophone: Bool = true) {
+        self.recordSystemAudio = recordSystemAudio
+        self.recordMicrophone = recordMicrophone
     }
 }
 
@@ -45,24 +56,135 @@ public enum RecordingError: Error, LocalizedError, Sendable {
 
 public protocol ScreenRecording: AnyObject, Sendable {
     var isRecording: Bool { get }
-    /// - Parameters:
-    ///   - displayID: Display to record.
-    ///   - regionInPixels: Region (top-left origin, display-local pixels) or `nil` for the whole display.
-    ///   - scaleFactor: Backing scale of the display (pixels per point).
-    func start(displayID: UInt32, regionInPixels: CGRect?, scaleFactor: CGFloat, outputURL: URL) async throws
+    func start(
+        displayID: UInt32,
+        regionInPixels: CGRect?,
+        scaleFactor: CGFloat,
+        audioOptions: RecordingAudioOptions,
+        outputURL: URL
+    ) async throws
     func stop() async throws -> URL
 }
 
-/// Records a display (or part of it) to an H.264 `.mp4` using ScreenCaptureKit + AVAssetWriter.
-public final class ScreenRecorder: NSObject, ScreenRecording, SCStreamOutput, SCStreamDelegate, @unchecked Sendable {
+/// Thread-safe stereo Float32 ring buffer used to mix ScreenCaptureKit system audio into microphone audio.
+private final class StereoAudioRingBuffer: @unchecked Sendable {
+    private let lock = NSLock()
+    private let capacityFrames: Int
+    private var left: [Float]
+    private var right: [Float]
+    private var readIndex = 0
+    private var writeIndex = 0
+    private var availableFrames = 0
+
+    init(capacityFrames: Int = 48000 * 2) {
+        self.capacityFrames = capacityFrames
+        self.left = [Float](repeating: 0, count: capacityFrames)
+        self.right = [Float](repeating: 0, count: capacityFrames)
+    }
+
+    func reset() {
+        lock.lock()
+        readIndex = 0
+        writeIndex = 0
+        availableFrames = 0
+        lock.unlock()
+    }
+
+    func append(sampleBuffer: CMSampleBuffer) {
+        var blockBuffer: CMBlockBuffer?
+        var audioBufferList = AudioBufferList(
+            mNumberBuffers: 2,
+            mBuffers: AudioBuffer(mNumberChannels: 0, mDataByteSize: 0, mData: nil)
+        )
+        let listSize = MemoryLayout<AudioBufferList>.size + MemoryLayout<AudioBuffer>.size
+        let rawPtr = UnsafeMutableRawPointer.allocate(byteCount: listSize, alignment: MemoryLayout<AudioBufferList>.alignment)
+        defer { rawPtr.deallocate() }
+        let ablPtr = rawPtr.bindMemory(to: AudioBufferList.self, capacity: 1)
+
+        let status = CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(
+            sampleBuffer,
+            bufferListSizeNeededOut: nil,
+            bufferListOut: ablPtr,
+            bufferListSize: listSize,
+            blockBufferAllocator: nil,
+            blockBufferMemoryAllocator: nil,
+            flags: kCMSampleBufferFlag_AudioBufferList_Assure16ByteAlignment,
+            blockBufferOut: &blockBuffer
+        )
+        guard status == noErr else { return }
+        _ = audioBufferList
+
+        let buffers = UnsafeMutableAudioBufferListPointer(ablPtr)
+        let frameCount = CMSampleBufferGetNumSamples(sampleBuffer)
+        guard frameCount > 0, !buffers.isEmpty else { return }
+
+        lock.lock()
+        defer { lock.unlock() }
+
+        if buffers.count >= 2,
+           let lPtr = buffers[0].mData?.assumingMemoryBound(to: Float.self),
+           let rPtr = buffers[1].mData?.assumingMemoryBound(to: Float.self) {
+            for i in 0..<frameCount {
+                left[writeIndex] = lPtr[i]
+                right[writeIndex] = rPtr[i]
+                writeIndex = (writeIndex + 1) % capacityFrames
+            }
+        } else if let ptr = buffers[0].mData?.assumingMemoryBound(to: Float.self) {
+            let channels = Int(max(buffers[0].mNumberChannels, 1))
+            for i in 0..<frameCount {
+                let l = ptr[i * channels]
+                let r = channels > 1 ? ptr[i * channels + 1] : l
+                left[writeIndex] = l
+                right[writeIndex] = r
+                writeIndex = (writeIndex + 1) % capacityFrames
+            }
+        } else {
+            return
+        }
+
+        availableFrames += frameCount
+        if availableFrames > capacityFrames {
+            let overflow = availableFrames - capacityFrames
+            readIndex = (readIndex + overflow) % capacityFrames
+            availableFrames = capacityFrames
+        }
+    }
+
+    /// Mixes queued stereo frames into an interleaved stereo Float32 buffer in-place.
+    func mixIntoInterleavedStereo(_ dst: UnsafeMutablePointer<Float>, frameCount: Int) {
+        lock.lock()
+        defer { lock.unlock() }
+        let toMix = min(frameCount, availableFrames)
+        guard toMix > 0 else { return }
+
+        for i in 0..<toMix {
+            let l = dst[i * 2] + left[readIndex]
+            let r = dst[i * 2 + 1] + right[readIndex]
+            dst[i * 2] = min(max(l, -1.0), 1.0)
+            dst[i * 2 + 1] = min(max(r, -1.0), 1.0)
+            readIndex = (readIndex + 1) % capacityFrames
+        }
+        availableFrames -= toMix
+    }
+}
+
+/// Records a display (or part of it) with optional System Audio + Microphone Voice to an `.mp4` file.
+public final class ScreenRecorder: NSObject, ScreenRecording, SCStreamOutput, SCStreamDelegate, AVCaptureAudioDataOutputSampleBufferDelegate, @unchecked Sendable {
     private let sampleQueue = DispatchQueue(label: "maccapture.recorder.samples")
     private let stateLock = NSLock()
+    private let systemAudioRingBuffer = StereoAudioRingBuffer()
 
     private var stream: SCStream?
+    private var micSession: AVCaptureSession?
     private var writer: AVAssetWriter?
     private var videoInput: AVAssetWriterInput?
+    private var audioInput: AVAssetWriterInput?
     private var outputURL: URL?
     private var sessionStarted = false
+    private var sessionStartPTS: CMTime = .invalid
+    private var lastAudioPTS: CMTime = .invalid
+    private var useMicAsMasterAudioClock = false
+    private var mixSystemAudioIntoMic = false
     private var streamError: Error?
     private var recording = false
 
@@ -74,7 +196,13 @@ public final class ScreenRecorder: NSObject, ScreenRecording, SCStreamOutput, SC
         return recording
     }
 
-    public func start(displayID: UInt32, regionInPixels: CGRect?, scaleFactor: CGFloat, outputURL: URL) async throws {
+    public func start(
+        displayID: UInt32,
+        regionInPixels: CGRect?,
+        scaleFactor: CGFloat,
+        audioOptions: RecordingAudioOptions = RecordingAudioOptions(),
+        outputURL: URL
+    ) async throws {
         if isRecording { throw RecordingError.alreadyRecording }
 
         let content = try await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: true)
@@ -87,7 +215,10 @@ public final class ScreenRecorder: NSObject, ScreenRecording, SCStreamOutput, SC
         config.pixelFormat = kCVPixelFormatType_32BGRA
         config.minimumFrameInterval = CMTime(value: 1, timescale: 30)
         config.showsCursor = true
-        config.capturesAudio = false
+        config.capturesAudio = audioOptions.recordSystemAudio
+        config.excludesCurrentProcessAudio = true
+        config.sampleRate = 48_000
+        config.channelCount = 2
         config.queueDepth = 6
         config.scalesToFit = false
 
@@ -100,7 +231,6 @@ public final class ScreenRecorder: NSObject, ScreenRecording, SCStreamOutput, SC
             guard !clamped.isNull, clamped.width >= 16, clamped.height >= 16 else {
                 throw RecordingError.invalidRegion
             }
-            // sourceRect is in display-local points with a top-left origin.
             config.sourceRect = CGRect(
                 x: clamped.minX / scale,
                 y: clamped.minY / scale,
@@ -116,7 +246,7 @@ public final class ScreenRecorder: NSObject, ScreenRecording, SCStreamOutput, SC
         config.width = pixelWidth
         config.height = pixelHeight
 
-        // Keep MacCapture's own UI (recording HUD, overlays) out of the video.
+        // Keep MacCapture's own UI (recording HUD, region border) out of the video.
         let currentPID = ProcessInfo.processInfo.processIdentifier
         let ownWindows = content.windows.filter { $0.owningApplication?.processID == currentPID }
         let filter = SCContentFilter(display: display, excludingWindows: ownWindows)
@@ -128,7 +258,8 @@ public final class ScreenRecorder: NSObject, ScreenRecording, SCStreamOutput, SC
         } catch {
             throw RecordingError.writerFailed(error.localizedDescription)
         }
-        let input = AVAssetWriterInput(mediaType: .video, outputSettings: [
+
+        let vInput = AVAssetWriterInput(mediaType: .video, outputSettings: [
             AVVideoCodecKey: AVVideoCodecType.h264,
             AVVideoWidthKey: pixelWidth,
             AVVideoHeightKey: pixelHeight,
@@ -138,30 +269,87 @@ public final class ScreenRecorder: NSObject, ScreenRecording, SCStreamOutput, SC
                 AVVideoExpectedSourceFrameRateKey: 30,
             ],
         ])
-        input.expectsMediaDataInRealTime = true
-        guard writer.canAdd(input) else {
+        vInput.expectsMediaDataInRealTime = true
+        guard writer.canAdd(vInput) else {
             throw RecordingError.writerFailed("Cannot add video input.")
         }
-        writer.add(input)
+        writer.add(vInput)
+
+        // Set up optional microphone capture session if requested & permitted
+        var configuredMicSession: AVCaptureSession?
+        if audioOptions.recordMicrophone,
+           AVCaptureDevice.authorizationStatus(for: .audio) == .authorized,
+           let micDevice = AVCaptureDevice.default(for: .audio),
+           let micDeviceInput = try? AVCaptureDeviceInput(device: micDevice) {
+            let session = AVCaptureSession()
+            let micOutput = AVCaptureAudioDataOutput()
+            micOutput.audioSettings = [
+                AVFormatIDKey: kAudioFormatLinearPCM,
+                AVSampleRateKey: 48_000,
+                AVNumberOfChannelsKey: 2,
+                AVLinearPCMBitDepthKey: 32,
+                AVLinearPCMIsFloatKey: true,
+                AVLinearPCMIsBigEndianKey: false,
+                AVLinearPCMIsNonInterleaved: false,
+            ]
+            micOutput.setSampleBufferDelegate(self, queue: sampleQueue)
+            if session.canAddInput(micDeviceInput), session.canAddOutput(micOutput) {
+                session.addInput(micDeviceInput)
+                session.addOutput(micOutput)
+                configuredMicSession = session
+            }
+        }
+
+        let hasMic = configuredMicSession != nil
+        let hasSystemAudio = audioOptions.recordSystemAudio
+        var aInput: AVAssetWriterInput?
+
+        if hasMic || hasSystemAudio {
+            let audioWriterInput = AVAssetWriterInput(mediaType: .audio, outputSettings: [
+                AVFormatIDKey: kAudioFormatMPEG4AAC,
+                AVSampleRateKey: 48_000,
+                AVNumberOfChannelsKey: 2,
+                AVEncoderBitRateKey: 128_000,
+            ])
+            audioWriterInput.expectsMediaDataInRealTime = true
+            if writer.canAdd(audioWriterInput) {
+                writer.add(audioWriterInput)
+                aInput = audioWriterInput
+            }
+        }
+
         guard writer.startWriting() else {
             throw RecordingError.writerFailed(writer.error?.localizedDescription ?? "startWriting failed")
         }
 
         let stream = SCStream(filter: filter, configuration: config, delegate: self)
         try stream.addStreamOutput(self, type: .screen, sampleHandlerQueue: sampleQueue)
+        if hasSystemAudio {
+            try stream.addStreamOutput(self, type: .audio, sampleHandlerQueue: sampleQueue)
+        }
+
+        systemAudioRingBuffer.reset()
 
         stateLock.lock()
         self.writer = writer
-        self.videoInput = input
+        self.videoInput = vInput
+        self.audioInput = aInput
+        self.micSession = configuredMicSession
         self.outputURL = outputURL
         self.stream = stream
         self.sessionStarted = false
+        self.sessionStartPTS = .invalid
+        self.lastAudioPTS = .invalid
+        self.useMicAsMasterAudioClock = hasMic
+        self.mixSystemAudioIntoMic = hasMic && hasSystemAudio
         self.streamError = nil
         stateLock.unlock()
 
         do {
             try await stream.startCapture()
+            configuredMicSession?.startRunning()
         } catch {
+            configuredMicSession?.stopRunning()
             writer.cancelWriting()
             stateLock.lock()
             resetLocked()
@@ -176,19 +364,24 @@ public final class ScreenRecorder: NSObject, ScreenRecording, SCStreamOutput, SC
 
     public func stop() async throws -> URL {
         stateLock.lock()
-        guard recording, let stream, let writer, let input = videoInput, let url = outputURL else {
+        guard recording, let stream, let writer, let vInput = videoInput, let url = outputURL else {
             stateLock.unlock()
             throw RecordingError.notRecording
         }
+        let aInput = audioInput
+        let mic = micSession
         recording = false
         let started = sessionStarted
         stateLock.unlock()
 
+        mic?.stopRunning()
         try? await stream.stopCapture()
 
-        // Drain any in-flight sample callbacks before finalizing.
+        // Drain sample queue before finalizing the file.
         await withCheckedContinuation { (cont: CheckedContinuation<Void, Never>) in
-            sampleQueue.async { cont.resume() }
+            sampleQueue.async {
+                cont.resume()
+            }
         }
 
         defer {
@@ -203,7 +396,8 @@ public final class ScreenRecorder: NSObject, ScreenRecording, SCStreamOutput, SC
             throw RecordingError.writerFailed("No frames were captured.")
         }
 
-        input.markAsFinished()
+        vInput.markAsFinished()
+        aInput?.markAsFinished()
         await writer.finishWriting()
         if writer.status == .failed {
             throw RecordingError.writerFailed(writer.error?.localizedDescription ?? "unknown error")
@@ -213,38 +407,144 @@ public final class ScreenRecorder: NSObject, ScreenRecording, SCStreamOutput, SC
 
     private func resetLocked() {
         stream = nil
+        micSession = nil
         writer = nil
         videoInput = nil
+        audioInput = nil
         outputURL = nil
         sessionStarted = false
+        sessionStartPTS = .invalid
+        lastAudioPTS = .invalid
+        useMicAsMasterAudioClock = false
+        mixSystemAudioIntoMic = false
         recording = false
+        systemAudioRingBuffer.reset()
     }
 
-    // MARK: - SCStreamOutput
+    // MARK: - SCStreamOutput (Video & System Audio)
 
     public func stream(_ stream: SCStream, didOutputSampleBuffer sampleBuffer: CMSampleBuffer, of type: SCStreamOutputType) {
-        guard type == .screen, sampleBuffer.isValid else { return }
+        guard sampleBuffer.isValid else { return }
 
-        // Only complete frames carry pixel data (idle/blank frames lack this status).
-        guard let attachments = CMSampleBufferGetSampleAttachmentsArray(sampleBuffer, createIfNecessary: false) as? [[SCStreamFrameInfo: Any]],
-              let raw = attachments.first?[.status] as? Int,
-              SCFrameStatus(rawValue: raw) == .complete else {
-            return
+        switch type {
+        case .screen:
+            guard let attachments = CMSampleBufferGetSampleAttachmentsArray(sampleBuffer, createIfNecessary: false) as? [[SCStreamFrameInfo: Any]],
+                  let raw = attachments.first?[.status] as? Int,
+                  SCFrameStatus(rawValue: raw) == .complete else {
+                return
+            }
+
+            let pts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+            stateLock.lock()
+            guard recording, let writer, let vInput = videoInput, writer.status == .writing else {
+                stateLock.unlock()
+                return
+            }
+            if !sessionStarted {
+                writer.startSession(atSourceTime: pts)
+                sessionStarted = true
+                sessionStartPTS = pts
+            }
+            stateLock.unlock()
+
+            if vInput.isReadyForMoreMediaData {
+                vInput.append(sampleBuffer)
+            }
+
+        case .audio:
+            stateLock.lock()
+            let isRec = recording
+            let started = sessionStarted
+            let micMaster = useMicAsMasterAudioClock
+            let shouldMix = mixSystemAudioIntoMic
+            stateLock.unlock()
+
+            guard isRec, started else { return }
+
+            if micMaster {
+                if shouldMix {
+                    systemAudioRingBuffer.append(sampleBuffer: sampleBuffer)
+                }
+            } else {
+                appendAudioSampleBuffer(sampleBuffer)
+            }
+
+        default:
+            break
         }
+    }
+
+    // MARK: - AVCaptureAudioDataOutputSampleBufferDelegate (Microphone Voice)
+
+    public func captureOutput(
+        _ output: AVCaptureOutput,
+        didOutput sampleBuffer: CMSampleBuffer,
+        from connection: AVCaptureConnection
+    ) {
+        guard sampleBuffer.isValid else { return }
 
         stateLock.lock()
-        guard let writer, let input = videoInput, writer.status == .writing else {
+        let isRec = recording
+        let started = sessionStarted
+        let shouldMix = mixSystemAudioIntoMic
+        stateLock.unlock()
+
+        guard isRec, started else { return }
+
+        if shouldMix {
+            mixSystemAudioInPlace(into: sampleBuffer)
+        }
+        appendAudioSampleBuffer(sampleBuffer)
+    }
+
+    private func mixSystemAudioInPlace(into micSampleBuffer: CMSampleBuffer) {
+        var blockBuffer: CMBlockBuffer?
+        var abl = AudioBufferList(
+            mNumberBuffers: 1,
+            mBuffers: AudioBuffer(mNumberChannels: 2, mDataByteSize: 0, mData: nil)
+        )
+        let status = CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(
+            micSampleBuffer,
+            bufferListSizeNeededOut: nil,
+            bufferListOut: &abl,
+            bufferListSize: MemoryLayout<AudioBufferList>.size,
+            blockBufferAllocator: nil,
+            blockBufferMemoryAllocator: nil,
+            flags: kCMSampleBufferFlag_AudioBufferList_Assure16ByteAlignment,
+            blockBufferOut: &blockBuffer
+        )
+        guard status == noErr,
+              let dataPtr = abl.mBuffers.mData?.assumingMemoryBound(to: Float.self) else {
+            return
+        }
+        let frames = CMSampleBufferGetNumSamples(micSampleBuffer)
+        systemAudioRingBuffer.mixIntoInterleavedStereo(dataPtr, frameCount: frames)
+    }
+
+    private func appendAudioSampleBuffer(_ sampleBuffer: CMSampleBuffer) {
+        let pts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+        stateLock.lock()
+        guard recording,
+              sessionStarted,
+              let writer,
+              let aInput = audioInput,
+              writer.status == .writing else {
             stateLock.unlock()
             return
         }
-        if !sessionStarted {
-            writer.startSession(atSourceTime: CMSampleBufferGetPresentationTimeStamp(sampleBuffer))
-            sessionStarted = true
+        if sessionStartPTS.isValid, CMTimeCompare(pts, sessionStartPTS) < 0 {
+            stateLock.unlock()
+            return
         }
+        if lastAudioPTS.isValid, CMTimeCompare(pts, lastAudioPTS) <= 0 {
+            stateLock.unlock()
+            return
+        }
+        lastAudioPTS = pts
         stateLock.unlock()
 
-        if input.isReadyForMoreMediaData {
-            input.append(sampleBuffer)
+        if aInput.isReadyForMoreMediaData {
+            aInput.append(sampleBuffer)
         }
     }
 

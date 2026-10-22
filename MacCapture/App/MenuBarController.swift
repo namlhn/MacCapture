@@ -10,6 +10,10 @@ public final class MenuBarController: NSObject, NSMenuDelegate {
     public var onCaptureModeSelected: ((CaptureMode) -> Void)?
     public var onRecordingModeSelected: ((RecordingMode) -> Void)?
     public var isRecordingProvider: (() -> Bool)?
+    public var isSystemAudioEnabledProvider: (() -> Bool)?
+    public var isMicrophoneEnabledProvider: (() -> Bool)?
+    public var onToggleSystemAudio: (() -> Void)?
+    public var onToggleMicrophone: (() -> Void)?
     public var onOpenEditorSelected: (() -> Void)?
     public var onToggleToolbarSelected: (() -> Void)?
     public var onOpenPreferencesSelected: (() -> Void)?
@@ -19,6 +23,8 @@ public final class MenuBarController: NSObject, NSMenuDelegate {
     private var toggleToolbarItem: NSMenuItem?
     private var recordRegionItem: NSMenuItem?
     private var recordFullscreenItem: NSMenuItem?
+    private var recordSystemAudioItem: NSMenuItem?
+    private var recordMicrophoneItem: NSMenuItem?
 
     override public init() {
         self.statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -43,6 +49,10 @@ public final class MenuBarController: NSObject, NSMenuDelegate {
         let recording = isRecordingProvider?() ?? false
         recordRegionItem?.title = recording ? "Stop Recording" : RecordingMode.region.displayName
         recordFullscreenItem?.isHidden = recording
+        recordSystemAudioItem?.isHidden = recording
+        recordMicrophoneItem?.isHidden = recording
+        recordSystemAudioItem?.state = (isSystemAudioEnabledProvider?() ?? true) ? .on : .off
+        recordMicrophoneItem?.state = (isMicrophoneEnabledProvider?() ?? true) ? .on : .off
         statusItem.button?.image = NSImage(
             systemSymbolName: recording ? "record.circle.fill" : "camera.viewfinder",
             accessibilityDescription: "MacCapture"
@@ -111,6 +121,24 @@ public final class MenuBarController: NSObject, NSMenuDelegate {
         recordFull.target = self
         recordFullscreenItem = recordFull
         menu.addItem(recordFull)
+
+        let sysAudioItem = NSMenuItem(
+            title: "Record System Audio",
+            action: #selector(toggleSystemAudioClicked),
+            keyEquivalent: ""
+        )
+        sysAudioItem.target = self
+        recordSystemAudioItem = sysAudioItem
+        menu.addItem(sysAudioItem)
+
+        let micItem = NSMenuItem(
+            title: "Record Microphone Voice",
+            action: #selector(toggleMicrophoneClicked),
+            keyEquivalent: ""
+        )
+        micItem.target = self
+        recordMicrophoneItem = micItem
+        menu.addItem(micItem)
 
         menu.addItem(.separator())
 
@@ -186,6 +214,16 @@ public final class MenuBarController: NSObject, NSMenuDelegate {
 
     @objc private func recordFullscreenClicked() {
         onRecordingModeSelected?(.fullscreen)
+    }
+
+    @objc private func toggleSystemAudioClicked() {
+        onToggleSystemAudio?()
+        refreshMenuLabels()
+    }
+
+    @objc private func toggleMicrophoneClicked() {
+        onToggleMicrophone?()
+        refreshMenuLabels()
     }
 
     @objc private func openEditorClicked() {

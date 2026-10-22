@@ -1,4 +1,5 @@
 import AppKit
+import AVFoundation
 import Combine
 import Foundation
 import SwiftUI
@@ -7,6 +8,8 @@ import SwiftUI
 final class RecordingHUDModel: ObservableObject {
     @Published var elapsed: TimeInterval = 0
     @Published var modeLabel: String = ""
+    @Published var isSystemAudioActive: Bool = true
+    @Published var isMicActive: Bool = true
     var onStop: (() -> Void)?
 
     var elapsedText: String {
@@ -27,6 +30,16 @@ private struct RecordingHUDView: View {
                 Text(model.modeLabel)
                     .font(.system(size: 11.5, weight: .medium))
                     .foregroundStyle(.secondary)
+            }
+            HStack(spacing: 5) {
+                Image(systemName: model.isSystemAudioActive ? "speaker.wave.2.fill" : "speaker.slash.fill")
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundStyle(model.isSystemAudioActive ? Color.primary : Color.secondary.opacity(0.6))
+                    .help(model.isSystemAudioActive ? "System Audio: ON" : "System Audio: OFF")
+                Image(systemName: model.isMicActive ? "mic.fill" : "mic.slash.fill")
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundStyle(model.isMicActive ? Color.red : Color.secondary.opacity(0.6))
+                    .help(model.isMicActive ? "Microphone Voice: ON" : "Microphone Voice: OFF")
             }
             Text(model.elapsedText)
                 .font(.system(size: 13, weight: .semibold).monospacedDigit())
@@ -191,15 +204,30 @@ public final class RecordingController {
         }
     }
 
-    public func toggle(mode: RecordingMode, delay: CaptureDelay = .none, preferredDisplayID: UInt32? = nil) async {
+    public func toggle(
+        mode: RecordingMode,
+        delay: CaptureDelay = .none,
+        audioOptions: RecordingAudioOptions = RecordingAudioOptions(),
+        preferredDisplayID: UInt32? = nil
+    ) async {
         if state == .recording {
             await stopRecording()
         } else {
-            await startRecording(mode: mode, delay: delay, preferredDisplayID: preferredDisplayID)
+            await startRecording(
+                mode: mode,
+                delay: delay,
+                audioOptions: audioOptions,
+                preferredDisplayID: preferredDisplayID
+            )
         }
     }
 
-    public func startRecording(mode: RecordingMode, delay: CaptureDelay = .none, preferredDisplayID: UInt32? = nil) async {
+    public func startRecording(
+        mode: RecordingMode,
+        delay: CaptureDelay = .none,
+        audioOptions: RecordingAudioOptions = RecordingAudioOptions(),
+        preferredDisplayID: UInt32? = nil
+    ) async {
         guard state == .idle else { return }
         state = .starting
 
@@ -209,6 +237,22 @@ public final class RecordingController {
             state = .idle
             onPermissionDenied?(mode)
             return
+        }
+
+        // Request Microphone access if voice recording is enabled
+        var effectiveAudio = audioOptions
+        if effectiveAudio.recordMicrophone {
+            let micStatus = AVCaptureDevice.authorizationStatus(for: .audio)
+            switch micStatus {
+            case .authorized:
+                break
+            case .notDetermined:
+                effectiveAudio.recordMicrophone = await AVCaptureDevice.requestAccess(for: .audio)
+            case .denied, .restricted:
+                effectiveAudio.recordMicrophone = false
+            @unknown default:
+                effectiveAudio.recordMicrophone = false
+            }
         }
 
         if delay.rawValue > 0 {
@@ -248,13 +292,14 @@ public final class RecordingController {
             if let region {
                 showRegionBorder(on: display, regionInPixels: region)
             }
-            showHUD(on: display, regionInPixels: region)
+            showHUD(on: display, regionInPixels: region, audioOptions: effectiveAudio)
             try? await Task.sleep(nanoseconds: 100_000_000)
 
             try await recorder.start(
                 displayID: display.id,
                 regionInPixels: region,
                 scaleFactor: display.scaleFactor,
+                audioOptions: effectiveAudio,
                 outputURL: Self.makeOutputURL()
             )
             startTimer()
@@ -344,8 +389,14 @@ public final class RecordingController {
         regionBorderWindow = nil
     }
 
-    private func showHUD(on display: CaptureDisplay, regionInPixels: CGRect?) {
+    private func showHUD(
+        on display: CaptureDisplay,
+        regionInPixels: CGRect?,
+        audioOptions: RecordingAudioOptions
+    ) {
         hudModel.elapsed = 0
+        hudModel.isSystemAudioActive = audioOptions.recordSystemAudio
+        hudModel.isMicActive = audioOptions.recordMicrophone
         if let regionInPixels {
             hudModel.modeLabel = "\(Int(regionInPixels.width))×\(Int(regionInPixels.height))"
         } else {
@@ -374,7 +425,6 @@ public final class RecordingController {
             let localRect = displayLocalRectInPoints(regionInPixels: regionInPixels, display: display)
             let globalRegion = localRect.offsetBy(dx: display.frameInPoints.minX, dy: display.frameInPoints.minY)
             let clampedX = min(max(globalRegion.midX - size.width / 2, visible.minX + 8), visible.maxX - size.width - 8)
-            // Prefer placing the Stop HUD just below the recorded region; fallback to above or top of screen
             let belowY = globalRegion.minY - size.height - 10
             let aboveY = globalRegion.maxY + 10
             let originY: CGFloat

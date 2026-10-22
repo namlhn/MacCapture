@@ -1,173 +1,197 @@
-# MacCapture — Ứng dụng Chụp Màn Hình & Chú Thích Chuyên Nghiệp cho macOS
+# MacCapture — Professional Screen Capture & Annotation App for macOS
 
-**MacCapture** là ứng dụng chụp màn hình (Screen Capture), chụp cuộn trang (Scrolling Capture) và chỉnh sửa/chú thích vector (Vector Annotation) siêu nhẹ, thuần native dành cho **macOS 14.0+**, được xây dựng bằng **Swift**, **AppKit**, **SwiftUI** và **ScreenCaptureKit**.
-
-Ứng dụng hoạt động hoàn toàn **100% Offline & Local** trên máy Mac của bạn — không cần tài khoản đám mây, không thu thập dữ liệu (zero telemetry) và khởi động tức thì với thanh công cụ nổi (**Floating Toolbar**) gọn đẹp cùng biểu tượng trên thanh **Menu Bar**.
+**English** • [Tiếng Việt](README.vi.md)
 
 ---
 
-## ✨ Tính năng nổi bật
+**MacCapture** is an ultra-lightweight, high-performance, native screen capture, scrolling capture, and non-destructive vector annotation utility built exclusively for **macOS 14.0+ (Sonoma and Sequoia)** using **Swift**, **AppKit**, **SwiftUI**, and Apple's modern **ScreenCaptureKit** framework.
 
-### 1. Thanh công cụ nổi (Floating Toolbar) & Menu Bar
-- **Giao diện kính mờ hiện đại (`ultraThinMaterial`)**:
-  - Gắn **Icon Logo MacCapture** chuẩn squircle macOS ngay đầu thanh công cụ (vừa là điểm nhận diện thương hiệu, vừa là tay nắm kéo di chuyển hoặc nhấp đúp để đưa về vị trí mặc định).
-  - Tự động lưu vị trí tương đối theo từng màn hình và tự động căn chỉnh lại khi cắm/rút màn hình rời.
-  - Hỗ trợ thu gọn sát mép màn hình (**Auto-collapse to edge**) chỉ còn biểu tượng mini để tiết kiệm diện tích.
-  - Có thể ẩn thanh công cụ nổi (`×`) bất kỳ lúc nào và điều khiển hoàn toàn từ biểu tượng trên **Menu Bar** hoặc bằng phím tắt toàn cục.
+Designed with a strict **100% Local & Offline** privacy-first philosophy, MacCapture requires zero accounts, collects zero telemetry, and starts instantly with a sleek frosted glass **Floating Toolbar** and a discreet **Menu Bar** companion.
 
-### 2. Bốn chế độ chụp màn hình chuyên dụng (`ScreenCaptureKit`)
-| Chế độ | Phím tắt mặc định | Mô tả chi tiết |
+---
+
+## ✨ Key Features
+
+### 1. Modern Floating Toolbar & Menu Bar Companion
+- **Frosted Glass Aesthetic (`ultraThinMaterial`)**:
+  - Embedded macOS squircle **App Logo** acts as both brand identity and an intuitive drag handle (double-click to quickly restore to default center position).
+  - **Multi-Monitor Intelligent Positioning**: Persists relative coordinates per physical display and automatically clamps bounds when connecting or disconnecting external monitors.
+  - **Auto-Collapse to Edge**: Snaps and collapses neatly against display edges into a subtle mini handle to keep screen real estate clutter-free.
+  - **Full Control Flexibility**: Hide the floating toolbar anytime (`×`) and trigger all actions directly via the **Menu Bar** icon or global keyboard shortcuts.
+
+### 2. Four Dedicated Capture Modes (`ScreenCaptureKit`)
+| Mode | Default Shortcut | Details |
 | :--- | :---: | :--- |
-| **Region** (Chụp vùng chọn) | `⌃⌘1` | Kéo chuột chọn vùng bất kỳ trên màn hình với tâm ngắm crosshair, hiển thị kích thước pixel thực (`W × H px`) theo thời gian thực, hỗ trợ kéo 4 hướng. |
-| **Window** (Chụp cửa sổ) | `⌃⌘2` | Di chuột qua cửa sổ bất kỳ để làm nổi bật khung xanh và tên ứng dụng; chụp chính xác cửa sổ độc lập (`desktopIndependentWindow`) kể cả khi bị cửa sổ khác đè lên. |
-| **Full** (Toàn màn hình) | `⌃⌘3` | Chụp ngay toàn bộ màn hình ở độ phân giải Retina gốc (hỗ trợ menu chọn màn hình nếu đang dùng nhiều màn hình). |
-| **Scroll** (Chụp cuộn trang) | `⌃⌘4` | **Chọn trực tiếp Cửa sổ / Tab trình duyệt** (không cần vẽ khung thủ công), tự động focus vào cửa sổ và **tự động cuộn từ trên xuống cuối trang** (hoặc đến khi bấm **Dừng / Space**), tự lọc bỏ Sticky Header / Tab Bar và ghép thành một bức ảnh dài liền mạch tốc độ cao. |
+| **Region** | `⌃⌘1` | Drag anywhere on screen with crosshair guides and live physical pixel dimensions (`W × H px`), supporting seamless dragging across all 4 directions. |
+| **Window** | `⌃⌘2` | Interactive hover selection highlighting windows with blue borders and app titles; captures clean isolated windows (`desktopIndependentWindow`) even when partially obscured. |
+| **Fullscreen** | `⌃⌘3` | Instant full-screen screenshot at native Retina resolution (includes multi-display selection picker when multiple monitors are connected). |
+| **Scrolling** | `⌃⌘4` | **Target any window or browser tab directly** (no manual bounding box required). Automatically activates the target window, drives smooth vertical scrolling down to page bottom (or until manually stopped via **Space** / **Stop**), deduplicates sticky headers/toolbars, and stitches into a single high-resolution panoramic image. |
 
-- **Hẹn giờ chụp (Capture Delay)**: Hỗ trợ hẹn giờ `0s`, `3s`, `5s`, `10s` ngay trên thanh công cụ (tự động đổi sang badge màu cam khi đang bật hẹn giờ).
+- **Capture Timer Delay**: Selectable countdowns of `0s`, `3s`, `5s`, or `10s` directly from the toolbar (accompanied by a visible amber badge when delay is active).
 
-### 3. Trình chỉnh sửa & Chú thích ảnh (Non-Destructive Vector Annotation Editor)
-Ngay sau khi chụp, ảnh được mở trong cửa sổ **Annotation Editor** với giao diện chuyên nghiệp, làm nổi bật màu công cụ đang chọn và hỗ trợ đầy đủ **Undo / Redo (`⌘Z` / `⇧⌘Z`)** lên tới 50 bước mà không làm tốn bộ nhớ:
+### 3. Screen Recording — Region & Fullscreen (`ScreenCaptureKit` + `AVAssetWriter`)
+- **Two Recording Modes**:
+  - **Record Region**: Drag to select any custom area on screen. While recording, an on-screen **red dashed border frame with L-brackets and a `● REC W×H` badge** clearly marks the active recording boundary without blocking mouse clicks or keyboard input (`ignoresMouseEvents = true`).
+  - **Record Fullscreen**: Record the entire active display at native Retina resolution.
+- **Floating Recording HUD**: Displays a live elapsed timer (`MM:SS`), resolution/mode label, and a one-click **Stop** button positioned right beside the recorded region (or at the top of the screen for fullscreen). Both the HUD and the region border are automatically excluded from the output video via `SCContentFilter`.
+- **Clean `.mp4` Output**: Encodes 30 FPS H.264 `.mp4` videos into `~/Movies/MacCapture/Screen Recording YYYY-MM-DD at HH.mm.ss.mp4` and automatically reveals the file in Finder when stopped.
 
-- **Select (`V`)**: Chọn, di chuyển, thay đổi kích thước (8 điểm neo quanh vật thể) hoặc xóa (`Delete`) bất kỳ chú thích nào đã vẽ.
-- **Arrow (`A`)**: Vẽ mũi tên chỉ dẫn sắc nét.
-- **Line (`L`)**: Vẽ đoạn thẳng trực tiếp từ điểm đầu đến điểm cuối, hỗ trợ kéo chỉnh lại 2 đầu mút dễ dàng.
-- **Rect (`R`)**: Vẽ khung chữ nhật viền nổi hoặc bật tùy chọn **Fill** để tô nền bán trong suốt.
-- **Ellipse (`O`)**: Vẽ hình tròn / elip khoanh vùng nội dung quan trọng.
-- **Text (`T`)**: Chèn chữ chú thích với nền pill bán trong suốt giúp dễ đọc trên mọi nền ảnh, tùy chỉnh cỡ chữ (`16pt`, `24pt`, `32pt`, `44pt`) và màu sắc.
-- **Blur (`B`) — Làm mờ thông tin nhạy cảm**:
-  - Kéo chọn vùng cần che (mật khẩu, số tài khoản, email, dữ liệu cá nhân...) để áp dụng hiệu ứng **Mosaic Pixelation (làm vỡ hạt ô vuông)** trực tiếp lên vùng ảnh.
-  - Hỗ trợ chỉnh 4 mức độ nhòe (ô vuông lớn/nhỏ) ngay tại thanh **Blur** phía dưới; khi xuất ảnh PNG hoặc Copy, vùng làm mờ được nướng cứng (irreversible) đảm bảo an toàn tuyệt đối.
-- **Crop (`C`) — Cắt ảnh 2 bước trực quan**:
-  - Kéo chọn vùng muốn giữ lại (phần ngoài tự động tối đi kèm lưới bố cục 1/3 và 8 chốt kéo góc/cạnh).
-  - Tinh chỉnh thoải mái rồi bấm nút xanh **`Hoàn thành Crop`** (hoặc nhấn `Enter`) ngay cạnh vùng cắt để cắt gọn khung ảnh, hoặc bấm **`Khôi phục ảnh gốc`** / `⌘Z` bất kỳ lúc nào.
+### 4. Non-Destructive Vector Annotation Editor
+Captured screenshots open immediately in a full-featured, zero-latency **Annotation Editor** window with active tool highlighting and a 50-step memory-efficient **Undo / Redo (`⌘Z` / `⇧⌘Z`)** command stack:
 
-### 4. Xuất ảnh chất lượng gốc (Copy & Save PNG)
-- **Copy (`⌘C`)**: Kết xuất (flatten) ảnh gốc + toàn bộ lớp vector/blur/crop ở đúng độ phân giải pixel vật lý (Retina 2x/3x) và chép thẳng vào Clipboard (`NSPasteboard`).
-- **Save PNG (`⌘S` / `⇧⌘S`)**: Lưu file PNG sắc nét, tự động loại bỏ siêu dữ liệu cá nhân (GPS/EXIF) với tên file mặc định theo thời gian (`MacCapture YYYY-MM-DD at HH.mm.ss.png`).
+- **Select (`V`)**: Pick, reposition, resize via 8 bounding box anchor points, or delete (`Delete`) any drawn annotation.
+- **Arrow (`A`)**: Draw sharp directional vector callout arrows.
+- **Line (`L`)**: Draw straight line segments with draggable end vertices.
+- **Rect (`R`)**: Draw rectangle frames with customizable stroke thickness, color palette, or optional semi-transparent fill.
+- **Ellipse (`O`)**: Draw circles and ovals to highlight key areas.
+- **Text (`T`)**: Add typography notes with an adaptive pill background for effortless legibility across light or dark backgrounds, complete with customizable font presets (`16pt`, `24pt`, `32pt`, `44pt`).
+- **Blur (`B`) — Privacy & Redaction**:
+  - Drag over sensitive screen information (passwords, auth tokens, banking details, private emails) to apply **Mosaic Pixelation** directly onto the underlying pixels.
+  - 4 customizable pixelation granularity levels via the bottom blur controls.
+  - Hardened and irreversibly flattened upon copy or PNG export, guaranteeing absolute data privacy.
+- **Crop (`C`) — Two-Step Interactive Crop**:
+  - Drag to define the target crop rectangle (outside area darkens with rule-of-thirds grid lines and 8 draggable corner/edge grips).
+  - Adjust precisely, then click **`Finish Crop`** (or press `Enter`) to trim the canvas, or press **`Reset Original`** / `⌘Z` anytime to revert.
+
+### 5. Pixel-Perfect Native Export (Clipboard & PNG)
+- **Copy to Clipboard (`⌘C`)**: Flattens original capture + all vector annotations + pixelation blur + crop bounds at full physical Retina resolution (2x / 3x) straight into `NSPasteboard`.
+- **Save Clean PNG (`⌘S` / `⇧⌘S`)**: Exports uncompressed PNG images stripped of sensitive metadata (GPS, EXIF, device info), automatically named with localized timestamps (`MacCapture YYYY-MM-DD at HH.mm.ss.png`).
 
 ---
 
-## ⌨️ Bảng phím tắt
+## ⌨️ Keyboard Shortcuts
 
-### Phím tắt toàn cục (Global Shortcuts)
-- `⌃⌘1`: Chụp vùng chọn (**Capture Region**)
-- `⌃⌘2`: Chụp cửa sổ (**Capture Window**)
-- `⌃⌘3`: Chụp toàn màn hình (**Capture Fullscreen**)
-- `⌃⌘4`: Chụp cuộn cửa sổ / tab trình duyệt (**Capture Scrolling**)
-- `⌃⌘T`: Ẩn / Hiện thanh công cụ nổi (**Show/Hide Floating Toolbar**)
+### Global Hotkeys
+- `⌃⌘1`: Capture Region
+- `⌃⌘2`: Capture Window
+- `⌃⌘3`: Capture Fullscreen
+- `⌃⌘4`: Capture Scrolling Window / Webpage
+- `⌃⌘T`: Toggle Floating Toolbar Visibility
 
-### Phím tắt trong khi Chụp & Chỉnh sửa
+### In-App & Editor Hotkeys
 - `Space` / `Return (Enter)`:
-  - Trong chế độ **Scroll**: Dừng cuộn & mở ảnh đã ghép trong Editor.
-  - Trong chế độ **Crop**: Xác nhận hoàn thành cắt ảnh.
-- `Esc`: Hủy thao tác chụp hoặc hủy vùng đang chọn.
-- `⌘Z` / `⇧⌘Z`: Hoàn tác (Undo) / Làm lại (Redo).
-- `Delete` / `Backspace`: Xóa đối tượng chú thích đang chọn.
-- `⌘C`: Copy ảnh đã chú thích vào Clipboard.
-- `⌘S` / `⇧⌘S`: Lưu nhanh file PNG / Lưu thành (Save As…).
+  - In **Scrolling Capture**: Stop scrolling and open stitched image in Editor.
+  - In **Crop Mode**: Confirm and apply the crop boundaries.
+- `Esc`: Cancel active capture or dismiss selection overlay.
+- `⌘Z` / `⇧⌘Z`: Undo / Redo annotation actions.
+- `Delete` / `Backspace`: Remove selected annotation object.
+- `⌘C`: Copy flattened image to system Clipboard.
+- `⌘S` / `⇧⌘S`: Quick Save PNG / Save As… dialog.
 
 ---
 
-## 🏗️ Kiến trúc & Cấu trúc thư mục
+## 🏗️ Architecture & Project Structure
 
 ```text
 MacCapture/
-├── README.md
-├── LICENSE
-├── plan.md
-├── CONTRIBUTING.md
+├── README.md                         # English documentation
+├── README.vi.md                      # Vietnamese documentation
+├── LICENSE                           # MIT License
+├── plan.md                           # Specification & implementation roadmap
+├── CONTRIBUTING.md                   # Contribution guidelines
 ├── docs/
-│   ├── architecture.md               # Kiến trúc phân tầng & quyết định kỹ thuật (ADR)
-│   ├── ui-spec.md                    # Đặc tả giao diện Floating Toolbar & Editor
-│   ├── permission-guide.md           # Hướng dẫn cấp quyền Screen Recording & Accessibility
-│   └── test-matrix.md                # Ma trận kiểm thử tự động & thủ công
-├── MacCapture.xcodeproj/             # Project Xcode thuần native (không phụ thuộc thư viện ngoài)
+│   ├── architecture.md               # Layered architecture & Architecture Decision Records (ADRs)
+│   ├── ui-spec.md                    # Detailed UI specifications for Toolbar & Editor
+│   ├── permission-guide.md           # Step-by-step Screen Recording & Accessibility guide
+│   └── test-matrix.md                # Automated test matrix & manual validation criteria
+├── MacCapture.xcodeproj/             # Native Xcode project (zero third-party dependencies)
 ├── build/
-│   └── MacCapture.app                # Bản đóng gói ứng dụng Release (.app) sẵn sàng chạy ngay
+│   └── MacCapture.app                # Standalone pre-compiled Release application bundle
 ├── MacCapture/
 │   ├── App/
-│   │   ├── MacCaptureApp.swift       # Entry point của ứng dụng
-│   │   ├── AppDelegate.swift         # Quản lý vòng đời ứng dụng macOS
-│   │   ├── AppCoordinator.swift      # Điều phối trung tâm giữa Toolbar, Capture, MenuBar và Editor
-│   │   └── MenuBarController.swift   # Biểu tượng & menu điều khiển trên thanh Menu Bar
+│   │   ├── MacCaptureApp.swift       # SwiftUI app entry point
+│   │   ├── AppDelegate.swift         # macOS application lifecycle manager
+│   │   ├── AppCoordinator.swift      # Central coordinator connecting Toolbar, Capture, Editor & MenuBar
+│   │   └── MenuBarController.swift   # Menu Bar status item & contextual menus
 │   ├── Core/
-│   │   ├── CaptureTypes.swift        # Các kiểu dữ liệu cốt lõi (CaptureMode, CaptureDisplay, CaptureWindow...)
-│   │   ├── PermissionManager.swift   # Kiểm tra & yêu cầu quyền Screen Recording
-│   │   └── HotkeyManager.swift       # Đăng ký phím tắt toàn cục qua Carbon RegisterEventHotKey
+│   │   ├── CaptureTypes.swift        # Core data models (CaptureMode, CaptureDisplay, CaptureWindow...)
+│   │   ├── PermissionManager.swift   # System permission checks & onboarding prompts
+│   │   └── HotkeyManager.swift       # Carbon RegisterEventHotKey global shortcut dispatcher
 │   ├── Features/
 │   │   ├── Toolbar/
-│   │   │   ├── FloatingToolbarPanel.swift    # NSPanel nổi không chiếm focus (nonactivatingPanel)
-│   │   │   ├── ToolbarView.swift             # Giao diện Floating Toolbar kèm AppLogoBadgeView
-│   │   │   ├── ToolbarViewModel.swift        # Trạng thái hiển thị & hành động trên Toolbar
-│   │   │   └── ToolbarPositionStore.swift    # Lưu & phục hồi vị trí Toolbar trên đa màn hình
+│   │   │   ├── FloatingToolbarPanel.swift    # Non-activating floating NSPanel
+│   │   │   ├── ToolbarView.swift             # SwiftUI Floating Toolbar view with AppLogoBadgeView
+│   │   │   ├── ToolbarViewModel.swift        # Presentation state machine & user interaction bindings
+│   │   │   └── ToolbarPositionStore.swift    # Multi-display position storage & clamping
 │   │   ├── Capture/
-│   │   │   ├── CaptureCoordinator.swift          # Máy trạng thái (State Machine) điều phối quy trình chụp
-│   │   │   ├── ScreenCaptureEngine.swift         # Chụp màn hình & cửa sổ qua ScreenCaptureKit (có cache filter)
-│   │   │   ├── RegionOverlayController.swift     # Lớp phủ chọn vùng chụp (Crosshair & kích thước pixel)
-│   │   │   ├── WindowSelectionController.swift   # Lớp phủ chọn Cửa sổ / Tab trình duyệt
-│   │   │   ├── ScrollingCaptureController.swift  # Tự động cuộn cửa sổ & thuật toán ghép ảnh dọc tốc độ cao
-│   │   │   └── CoordinateConverter.swift         # Chuyển đổi tọa độ AppKit <-> CoreGraphics <-> Pixel Retina
+│   │   │   ├── CaptureCoordinator.swift          # Capture workflow state machine
+│   │   │   ├── ScreenCaptureEngine.swift         # ScreenCaptureKit engine with SCShareableContent caching
+│   │   │   ├── RegionOverlayController.swift     # Interactive crosshair & live dimension overlay
+│   │   │   ├── WindowSelectionController.swift   # Window / browser tab highlight & picker overlay
+│   │   │   ├── ScrollingCaptureController.swift  # Automated scroll driver & vertical stitcher
+│   │   │   └── CoordinateConverter.swift         # AppKit <-> CoreGraphics <-> Retina pixel coordinate transformations
+│   │   ├── Recording/
+│   │   │   ├── RecordingController.swift         # Screen recording lifecycle & countdown manager
+│   │   │   └── ScreenRecorder.swift              # ScreenCaptureKit video stream & AVAssetWriter pipeline
 │   │   ├── Editor/
-│   │   │   ├── AnnotationModels.swift        # Mô hình dữ liệu Vector Annotation (Arrow, Line, Rect, Ellipse, Text, Blur)
-│   │   │   ├── AnnotationCommandStack.swift  # Ngăn xếp Undo/Redo dựa trên lệnh (Command Pattern)
-│   │   │   ├── AnnotationCanvas.swift        # Canvas vẽ & tương tác trực tiếp + bộ lọc Pixelation Blur
-│   │   │   ├── EditorView.swift              # Giao diện cửa sổ chỉnh sửa ảnh & thanh công cụ
-│   │   │   └── EditorWindowController.swift  # Quản lý cửa sổ Editor & hộp thoại lưu file
+│   │   │   ├── AnnotationModels.swift        # Vector data models (Arrow, Line, Rect, Ellipse, Text, Blur)
+│   │   │   ├── AnnotationCommandStack.swift  # Command Pattern undo/redo stack
+│   │   │   ├── AnnotationCanvas.swift        # Interactive canvas drawing surface & pixelation blur shader
+│   │   │   ├── EditorView.swift              # Full annotation editor SwiftUI window & tool palette
+│   │   │   └── EditorWindowController.swift  # Editor window lifecycle & save dialog management
 │   │   ├── Export/
-│   │   │   ├── ImageRenderer.swift           # Kết xuất ảnh gốc + chú thích vector + blur + crop ra CGImage
-│   │   │   ├── PNGExporter.swift             # Mã hóa file PNG sạch metadata qua ImageIO
-│   │   │   └── ClipboardService.swift        # Sao chép ảnh vào NSPasteboard
+│   │   │   ├── ImageRenderer.swift           # High-resolution image compositor (base + vector + blur + crop)
+│   │   │   ├── PNGExporter.swift             # Metadata-stripped PNG encoder via ImageIO
+│   │   │   └── ClipboardService.swift        # High-res image clipboard pasteboard service
 │   │   └── Settings/
-│   │       ├── PreferencesStore.swift        # Lưu trữ cài đặt người dùng (UserDefaults & Launch at Login)
-│   │       └── PreferencesView.swift         # Cửa sổ cài đặt (General, Shortcuts, Privacy)
+│   │       ├── PreferencesStore.swift        # User preferences persistence (UserDefaults & Launch at Login)
+│   │       └── PreferencesView.swift         # Settings window (General, Shortcuts, Privacy)
 │   └── Resources/
-│       ├── Assets.xcassets/                  # Bộ AppIcon.appiconset đầy đủ 10 kích thước chuẩn macOS
-│       ├── Info.plist                        # Cấu hình bundle & mô tả quyền riêng tư
-│       └── MacCapture.entitlements           # Quyền thực thi ứng dụng
-├── MacCaptureTests/                          # Bộ 21 Unit Tests kiểm thử toàn diện
-└── MacCaptureUITests/                        # Bộ UI Smoke Tests
+│       ├── Assets.xcassets/                  # AppIcon asset catalog with all macOS sizes
+│       ├── Info.plist                        # Bundle metadata & privacy usage descriptions
+│       └── MacCapture.entitlements           # App security entitlements
+├── MacCaptureTests/                          # Comprehensive unit test suite (21 unit tests)
+└── MacCaptureUITests/                        # UI smoke test suite
 ```
 
 ---
 
-## 🚀 Hướng dẫn Chạy & Biên dịch
+## 🚀 Getting Started & Building
 
-### Cách 1: Chạy trực tiếp bản `.app` đã đóng gói sẵn (Nhanh nhất)
-Bản biên dịch tối ưu hóa (`Release`) đã được đóng gói sẵn tại `build/MacCapture.app`. Mở **Terminal** và chạy:
+### Method 1: Launch the Pre-built `.app` (Recommended)
+An optimized `Release` build is pre-compiled and ready at `build/MacCapture.app`. Open **Terminal** and run:
 
 ```bash
 open /Users/win/Documents/antigravity/calm-einstein/build/MacCapture.app
 ```
 
-Bạn cũng có thể kéo file `build/MacCapture.app` vào thư mục `/Applications` để sử dụng lâu dài như mọi ứng dụng macOS khác.
+You can also drag `build/MacCapture.app` into your `/Applications` directory to use it like any standard macOS app.
 
-### Cách 2: Mở và chạy trong Xcode
+### Method 2: Open and Run in Xcode
 ```bash
 open /Users/win/Documents/antigravity/calm-einstein/MacCapture.xcodeproj
 ```
-Chọn scheme **`MacCapture`** → Nhấn **`⌘R` (Run)**.
+Select the **`MacCapture`** scheme → Press **`⌘R` (Run)**.
 
-### Cách 3: Biên dịch và chạy Unit Tests bằng dòng lệnh
+### Method 3: Command-Line Build & Run Unit Tests
 ```bash
-# Biên dịch bản Release
+# Build Release binary
 xcodebuild -project MacCapture.xcodeproj -scheme MacCapture -configuration Release build
 
-# Chạy toàn bộ 21 Unit Tests
+# Run all 21 Unit Tests
 xcodebuild test -project MacCapture.xcodeproj -scheme MacCapture -destination 'platform=macOS' -only-testing:MacCaptureTests
 ```
 
 ---
 
-## 🔐 Quyền Hệ thống (macOS Permissions)
+## 🔐 Required macOS Permissions
 
-1. **Screen Recording (Ghi màn hình — Bắt buộc khi chụp)**:
-   - Vào `System Settings → Privacy & Security → Screen & System Audio Recording` và bật công tắc cho **MacCapture**.
-2. **Accessibility (Trợ năng — Dùng cho tính năng Tự động cuộn `Scroll`)**:
-   - Để ứng dụng có thể tự động gửi sự kiện lăn chuột sang cửa sổ trình duyệt khi chụp cuộn (`Scroll`), vào `System Settings → Privacy & Security → Accessibility` và bật công tắc cho **MacCapture**.
-   - *(Mẹo: Nếu biên dịch lại bản mới, hãy tắt rồi bật lại công tắc `MacCapture` trong mục Accessibility để macOS cập nhật chữ ký mới của ứng dụng).*
+1. **Screen Recording (Required for Capture & Recording)**:
+   - Navigate to `System Settings → Privacy & Security → Screen & System Audio Recording` and ensure **MacCapture** is toggled **ON**.
+2. **Accessibility (Required for Scrolling Capture)**:
+   - To enable automated mouse wheel scrolling events during **Scrolling Capture** (`Scroll`), navigate to `System Settings → Privacy & Security → Accessibility` and toggle **MacCapture** **ON**.
+   - *(Note: If you recompile a new binary, toggle the switch off and on again so macOS updates the code signature).*
 
 ---
 
-## 📄 Giấy phép (License)
+## 🛡️ Privacy & Security
 
-Phát hành theo giấy phép [MIT License](LICENSE).
+- **100% Offline**: Zero network calls, zero analytics, zero telemetry.
+- **Local Processing**: All image processing, vector rendering, and stitching happen entirely in memory on your Mac.
+- **Clean Output**: Exported PNG files are automatically stripped of sensitive EXIF, GPS, and device metadata.
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).

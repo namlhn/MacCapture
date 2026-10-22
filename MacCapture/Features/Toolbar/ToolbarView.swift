@@ -146,6 +146,8 @@ public struct ToolbarView: View {
 
             delayMenu
 
+            recordButton
+
             moreMenu
 
             hideButton
@@ -287,6 +289,44 @@ public struct ToolbarView: View {
         .accessibilityIdentifier("ToolbarMenu_Delay")
     }
 
+    private var recordButton: some View {
+        Group {
+            if viewModel.isRecording {
+                Button {
+                    viewModel.triggerRecording(.fullscreen)
+                } label: {
+                    Label("Stop", systemImage: "stop.circle.fill")
+                        .font(.system(size: 11.5, weight: .semibold))
+                        .foregroundStyle(Color.red)
+                        .padding(.horizontal, 6)
+                        .frame(minHeight: 30)
+                }
+                .buttonStyle(ToolbarCapturePillStyle())
+                .help("Stop Recording")
+                .accessibilityLabel("Stop Recording")
+            } else {
+                Menu {
+                    Button(RecordingMode.region.displayName) {
+                        viewModel.triggerRecording(.region)
+                    }
+                    Button(RecordingMode.fullscreen.displayName) {
+                        viewModel.triggerRecording(.fullscreen)
+                    }
+                } label: {
+                    Image(systemName: "record.circle")
+                        .font(.system(size: 13.5, weight: .medium))
+                        .foregroundStyle(Color.red)
+                        .frame(width: 28, height: 30)
+                }
+                .menuStyle(.borderlessButton)
+                .fixedSize()
+                .help("Screen Recording (Region / Fullscreen)")
+                .accessibilityLabel("Screen Recording")
+            }
+        }
+        .accessibilityIdentifier("ToolbarMenu_Record")
+    }
+
     private var moreMenu: some View {
         Menu {
             Button("Open Editor…") {
@@ -299,8 +339,18 @@ public struct ToolbarView: View {
             Button("Scrolling Capture") {
                 viewModel.triggerCapture(.scrolling)
             }
-            Button("Screen Recording (Coming in v0.3)") {}
-                .disabled(true)
+            if viewModel.isRecording {
+                Button("Stop Recording") {
+                    viewModel.triggerRecording(.fullscreen)
+                }
+            } else {
+                Button(RecordingMode.region.displayName) {
+                    viewModel.triggerRecording(.region)
+                }
+                Button(RecordingMode.fullscreen.displayName) {
+                    viewModel.triggerRecording(.fullscreen)
+                }
+            }
             Divider()
             Button("Preferences…") {
                 viewModel.onOpenPreferencesRequested?()

@@ -8,6 +8,8 @@ public final class MenuBarController: NSObject, NSMenuDelegate {
 
     public var isToolbarVisibleProvider: (() -> Bool)?
     public var onCaptureModeSelected: ((CaptureMode) -> Void)?
+    public var onRecordingModeSelected: ((RecordingMode) -> Void)?
+    public var isRecordingProvider: (() -> Bool)?
     public var onOpenEditorSelected: (() -> Void)?
     public var onToggleToolbarSelected: (() -> Void)?
     public var onOpenPreferencesSelected: (() -> Void)?
@@ -15,6 +17,8 @@ public final class MenuBarController: NSObject, NSMenuDelegate {
     public var onQuitSelected: (() -> Void)?
 
     private var toggleToolbarItem: NSMenuItem?
+    private var recordRegionItem: NSMenuItem?
+    private var recordFullscreenItem: NSMenuItem?
 
     override public init() {
         self.statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -35,6 +39,14 @@ public final class MenuBarController: NSObject, NSMenuDelegate {
     public func refreshMenuLabels() {
         let visible = isToolbarVisibleProvider?() ?? true
         toggleToolbarItem?.title = visible ? "Hide Floating Toolbar" : "Show Floating Toolbar"
+
+        let recording = isRecordingProvider?() ?? false
+        recordRegionItem?.title = recording ? "Stop Recording" : RecordingMode.region.displayName
+        recordFullscreenItem?.isHidden = recording
+        statusItem.button?.image = NSImage(
+            systemSymbolName: recording ? "record.circle.fill" : "camera.viewfinder",
+            accessibilityDescription: "MacCapture"
+        )
     }
 
     public func menuWillOpen(_ menu: NSMenu) {
@@ -79,6 +91,28 @@ public final class MenuBarController: NSObject, NSMenuDelegate {
         scrollingItem.keyEquivalentModifierMask = [.control, .command]
         scrollingItem.target = self
         menu.addItem(scrollingItem)
+
+        menu.addItem(.separator())
+
+        let recordRegion = NSMenuItem(
+            title: RecordingMode.region.displayName,
+            action: #selector(recordRegionClicked),
+            keyEquivalent: ""
+        )
+        recordRegion.target = self
+        recordRegionItem = recordRegion
+        menu.addItem(recordRegion)
+
+        let recordFull = NSMenuItem(
+            title: RecordingMode.fullscreen.displayName,
+            action: #selector(recordFullscreenClicked),
+            keyEquivalent: ""
+        )
+        recordFull.target = self
+        recordFullscreenItem = recordFull
+        menu.addItem(recordFull)
+
+        menu.addItem(.separator())
 
         let openEditorItem = NSMenuItem(
             title: "Open Editor…",
@@ -144,6 +178,14 @@ public final class MenuBarController: NSObject, NSMenuDelegate {
 
     @objc private func captureScrollingClicked() {
         onCaptureModeSelected?(.scrolling)
+    }
+
+    @objc private func recordRegionClicked() {
+        onRecordingModeSelected?(.region)
+    }
+
+    @objc private func recordFullscreenClicked() {
+        onRecordingModeSelected?(.fullscreen)
     }
 
     @objc private func openEditorClicked() {

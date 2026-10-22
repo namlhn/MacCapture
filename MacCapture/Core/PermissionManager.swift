@@ -14,6 +14,11 @@ public protocol PermissionManaging: AnyObject {
     func currentStatus() -> PermissionStatus
     func requestAccess() async -> Bool
     func openSystemSettings()
+    func resetAndRePromptAccess()
+}
+
+public extension PermissionManaging {
+    func resetAndRePromptAccess() {}
 }
 
 @MainActor
@@ -33,12 +38,20 @@ public final class PermissionManager: PermissionManaging {
         if CGPreflightScreenCaptureAccess() {
             return true
         }
+        // Check with ScreenCaptureKit first in case permission was already granted or updated
+        do {
+            _ = try await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: true)
+            return true
+        } catch {
+            // Fall through to prompt only once per session
+        }
+        guard !hasPromptedThisSession else {
+            return false
+        }
         hasPromptedThisSession = true
-        let granted = CGRequestScreenCaptureAccess()
-        if granted {
+        if CGRequestScreenCaptureAccess() {
             return true
         }
-        // Verify with ScreenCaptureKit shareable content enumeration in case permission was just toggled
         do {
             _ = try await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: true)
             return true
@@ -51,5 +64,17 @@ public final class PermissionManager: PermissionManaging {
         if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture") {
             NSWorkspace.shared.open(url)
         }
+    }
+
+    public func resetAndRePromptAccess() {
+        let bundleID = Bundle.main.bundleIdentifier ?? "com.maccapture.app"
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/tccutil")
+        process.arguments = ["reset", "ScreenCapture", bundleID]
+        try? process.run()
+        process.waitUntilExit()
+        hasPromptedThisSession = false
+        _ = CGRequestScreenCaptureAccess()
+        openSystemSettings()
     }
 }
